@@ -14,6 +14,7 @@ def main(*argv, **kwargs):
 	morse[' '] = '/'
 
 	amount = 0
+	messages = []
 	coded_messages = []
 
 	message = input()
@@ -21,6 +22,7 @@ def main(*argv, **kwargs):
 	while message:
 		amount += 1
 
+		messages.append(message)
 		coded_messages.append(' '.join(map(morse.get, message)))
 
 		message = input()
@@ -30,6 +32,10 @@ def main(*argv, **kwargs):
 	for coded_message in coded_messages:
 		print(len(coded_message))
 		print(coded_message)
+
+	print()
+
+	print(str('\n\n'.join(messages)))
 
 if __name__ == '__main__':
 	main()
