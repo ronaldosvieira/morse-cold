@@ -13,11 +13,17 @@ def main(*argv, **kwargs):
 
 	morse[' '] = '/'
 
-	message = input()
+	amount = int(input())
 
-	coded_message = ' '.join(map(morse.get, message))
+	print(amount)
 
-	print(coded_message)
+	for _ in range(amount):
+		message = input()
+
+		coded_message = ' '.join(map(morse.get, message))
+
+		print(len(coded_message))
+		print(coded_message)
 
 if __name__ == '__main__':
 	main()
