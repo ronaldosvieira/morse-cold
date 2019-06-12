@@ -26,16 +26,13 @@ def main(*argv, **kwargs):
 		coded_messages.append(' '.join(map(morse.get, message)))
 
 		message = input()
-
-	print(amount)
 	
 	for coded_message in coded_messages:
-		print(len(coded_message))
 		print(coded_message)
 
 	print()
 
-	print(str('\n\n'.join(messages)))
+	print(str('\n'.join(messages)))
 
 if __name__ == '__main__':
 	main()
