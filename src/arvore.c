@@ -27,7 +27,7 @@ TipoArvore NovoNoVazio() {
     return (TipoArvore) malloc(sizeof(TipoTrieNo));
 }
 
-TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
+TipoRegistro* PesquisarR(TipoChave k, TipoArvore t, int posicao) {
     if (t == NULL) return NULL;
 
     TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
@@ -42,9 +42,9 @@ TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
     if (posicao > D) return NULL;
 
     if (digitoAtual == '.')
-        return PesquisaR(k, t->Esq, posicao + 1);
+        return PesquisarR(k, t->Esq, posicao + 1);
     else if (digitoAtual == '-')
-        return PesquisaR(k, t->Dir, posicao + 1);
+        return PesquisarR(k, t->Dir, posicao + 1);
     else if (digitoAtual == '\0')
         if (ChavesSaoIguais(t->Chave, k))
             return &t->Registro;
@@ -56,22 +56,22 @@ TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
     return NULL;
 }
 
-TipoRegistro* Pesquisa(TipoChave k, TipoArvore t) {
-    return PesquisaR(k, t, 0);
+TipoRegistro* Pesquisar(TipoChave k, TipoArvore t) {
+    return PesquisarR(k, t, 0);
 }
 
-TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao) {
+TipoArvore Separar(TipoArvore no1, TipoArvore no2, int posicao) {
     TipoArvore novo = NovoNoVazio();
 
-    printf("Separa %c de %c\n", no1->Registro, no2->Registro);
+    printf("Separar %c de %c\n", no1->Registro, no2->Registro);
 
     TipoIndexAmp digitoAtual1 = ObterDigito(no1->Chave, posicao);
     TipoIndexAmp digitoAtual2 = ObterDigito(no2->Chave, posicao);
 
     if (digitoAtual1 == '.' && digitoAtual2 == '.') {
-        novo->Esq = Separa(no1, no2, posicao + 1);
+        novo->Esq = Separar(no1, no2, posicao + 1);
     } else if (digitoAtual1 == '-' && digitoAtual2 == '-') {
-        novo->Dir = Separa(no1, no2, posicao + 1);
+        novo->Dir = Separar(no1, no2, posicao + 1);
     } else if (digitoAtual1 == '.' && digitoAtual2 == '-') {
         novo->Esq = no1;
         novo->Dir = no2;
@@ -105,7 +105,7 @@ TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao) {
     if (t == NULL) return NovoNoComRegistro(k, r);
 
     if (t->Esq == NULL && t->Dir == NULL)
-        return Separa(NovoNoComRegistro(k, r), t, posicao);
+        return Separar(NovoNoComRegistro(k, r), t, posicao);
 
     TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
 
@@ -126,4 +126,24 @@ TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao) {
 
 TipoArvore Inserir(TipoChave k, TipoRegistro r, TipoArvore t) {
     return InserirR(k, r, t, 0);
+}
+
+void ImprimirArvoreR(TipoArvore a, int nivel) {
+    if (a == NULL) return;
+
+    int i;
+    for (i = 0; i < nivel; i++)
+        printf("\t");
+
+    if (a->Chave != NULL)
+        printf("(%s %c)\n", a->Chave, a->Registro);
+    else
+        printf("( . )\n");
+
+    ImprimirArvoreR(a->Esq, nivel + 1);
+    ImprimirArvoreR(a->Dir, nivel + 1);
+}
+
+void ImprimirArvore(TipoArvore a) {
+    ImprimirArvoreR(a, 0);
 }

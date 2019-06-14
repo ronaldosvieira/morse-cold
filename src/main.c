@@ -7,26 +7,6 @@
 
 int rand() {return 5;}
 
-void imprimir_arvore_r(TipoArvore a, int nivel) {
-    if (a == NULL) return;
-
-    int i;
-    for (i = 0; i < nivel; i++)
-        printf("\t");
-
-    if (a->Chave != NULL)
-        printf("(%s %c)\n", a->Chave, a->Registro);
-    else
-        printf("( . )\n");
-
-    imprimir_arvore_r(a->Esq, nivel + 1);
-    imprimir_arvore_r(a->Dir, nivel + 1);
-}
-
-void imprimir_arvore(TipoArvore a) {
-    imprimir_arvore_r(a, 0);
-}
-
 int main(int argc, char *argv[]) {
     TipoArvore a = NULL;
     int i, j, k, n;
@@ -66,14 +46,14 @@ int main(int argc, char *argv[]) {
         a = Inserir(codigo, simbolo, a);
     }
 
-    TipoRegistro *reg = Pesquisa("..-.", a);
+    TipoRegistro *reg = Pesquisar("..-.", a);
 
     if (reg == NULL)
         printf("Nao foi encontrado\n");
     else
         printf("Foi encontrado\n");
 
-    imprimir_arvore(a);
+    ImprimirArvore(a);
 
     // Insere cada chave na arvore
     /*for (i = min; i <= max; i++) {
@@ -95,7 +75,7 @@ int main(int argc, char *argv[]) {
     for (i = min; i <= max; i++) {
         c = vetor[i - 32];
         printf("Pesquisando chave: %c\n", c);
-        Pesquisa(c, a);
+        Pesquisar(c, a);
     }*/
 
     return 0;

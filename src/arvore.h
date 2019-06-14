@@ -20,14 +20,18 @@ TipoArvore NovoNoComRegistro(TipoChave chave, TipoRegistro registro);
 
 TipoArvore NovoNoVazio();
 
-TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao);
+TipoRegistro* PesquisarR(TipoChave k, TipoArvore t, int posicao);
 
-TipoRegistro* Pesquisa(TipoChave k, TipoArvore t);
+TipoRegistro* Pesquisar(TipoChave k, TipoArvore t);
 
-TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao);
+TipoArvore Separar(TipoArvore no1, TipoArvore no2, int posicao);
 
 TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao);
 
 TipoArvore Inserir(TipoChave k, TipoRegistro r, TipoArvore t);
+
+void ImprimirArvoreR(TipoArvore a, int nivel);
+
+void ImprimirArvore(TipoArvore a);
 
 #endif //MORSE_COLD_ARVORE_H
