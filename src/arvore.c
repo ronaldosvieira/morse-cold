@@ -6,8 +6,6 @@
 
 #define D 4 /* depende de TipoChave */
 
-TipoArvore Separa(TipoArvore pNo, TipoArvore pTrieNo, int posicao);
-
 int ChavesSaoIguais(TipoChave chave1, TipoChave chave2) {
     return strcmp(chave1, chave2) == 0;
 }
@@ -32,6 +30,8 @@ TipoArvore NovoNoVazio() {
 TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
     if (t == NULL) return NULL;
 
+    TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
+
     if (t->Esq == NULL && t->Dir == NULL) {
         if (ChavesSaoIguais(t->Chave, k))
             return &t->Registro;
@@ -41,10 +41,15 @@ TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
 
     if (posicao > D) return NULL;
 
-    if (ObterDigito(k, posicao) == '.')
+    if (digitoAtual == '.')
         return PesquisaR(k, t->Esq, posicao + 1);
-    else if (ObterDigito(k, posicao) == '-')
+    else if (digitoAtual == '-')
         return PesquisaR(k, t->Dir, posicao + 1);
+    else if (digitoAtual == '\0')
+        if (ChavesSaoIguais(t->Chave, k))
+            return &t->Registro;
+        else
+            return NULL;
     else
         printf("Erro: digito invalido\n");
 
@@ -57,6 +62,8 @@ TipoRegistro* Pesquisa(TipoChave k, TipoArvore t) {
 
 TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao) {
     TipoArvore novo = NovoNoVazio();
+
+    printf("Separa %c de %c\n", no1->Registro, no2->Registro);
 
     TipoIndexAmp digitoAtual1 = ObterDigito(no1->Chave, posicao);
     TipoIndexAmp digitoAtual2 = ObterDigito(no2->Chave, posicao);
@@ -71,6 +78,24 @@ TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao) {
     } else if (digitoAtual1 == '-' && digitoAtual2 == '.') {
         novo->Esq = no2;
         novo->Dir = no1;
+    } else if (digitoAtual1 == '\0') {
+        if (digitoAtual2 == '.')
+            no1->Esq = no2;
+        else if (digitoAtual2 == '-')
+            no1->Dir = no2;
+
+        free(novo);
+
+        novo = no1;
+    } else if (digitoAtual2 == '\0') {
+        if (digitoAtual1 == '.')
+            no2->Esq = no1;
+        else if (digitoAtual1 == '-')
+            no2->Dir = no1;
+
+        free(novo);
+
+        novo = no2;
     }
 
     return novo;
@@ -83,11 +108,17 @@ TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao) {
         return Separa(NovoNoComRegistro(k, r), t, posicao);
 
     TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
+
     if (digitoAtual == '.')
         t->Esq = InserirR(k, r, t->Esq, posicao + 1);
     else if (digitoAtual == '-')
         t->Dir = InserirR(k, r, t->Dir, posicao + 1);
-    else
+    else if (digitoAtual == '\0') {
+        if (t->Chave == NULL) {
+            t->Chave = k;
+            t->Registro = r;
+        }
+    } else
         printf("Erro: digito invalido\n");
 
     return t;

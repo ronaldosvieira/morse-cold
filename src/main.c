@@ -14,14 +14,13 @@ void imprimir_arvore_r(TipoArvore a, int nivel) {
     for (i = 0; i < nivel; i++)
         printf("\t");
 
-    if (a->Chave == NULL) {
+    if (a->Chave != NULL)
+        printf("(%s %c)\n", a->Chave, a->Registro);
+    else
         printf("( . )\n");
 
-        imprimir_arvore_r(a->Esq, nivel + 1);
-        imprimir_arvore_r(a->Dir, nivel + 1);
-    } else {
-        printf("(%s %c)\n", a->Chave, a->Registro);
-    }
+    imprimir_arvore_r(a->Esq, nivel + 1);
+    imprimir_arvore_r(a->Dir, nivel + 1);
 }
 
 void imprimir_arvore(TipoArvore a) {

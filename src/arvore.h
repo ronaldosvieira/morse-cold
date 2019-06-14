@@ -1,7 +1,7 @@
 #ifndef MORSE_COLD_ARVORE_H
 #define MORSE_COLD_ARVORE_H
 
-typedef char* TipoChave; /* a definir, dependendo da aplicacao */
+typedef char* TipoChave;
 typedef char TipoRegistro;
 typedef char TipoIndexAmp;
 
