@@ -63,8 +63,6 @@ TipoRegistro* Pesquisar(TipoChave k, TipoArvore t) {
 TipoArvore Separar(TipoArvore no1, TipoArvore no2, int posicao) {
     TipoArvore novo = NovoNoVazio();
 
-    printf("Separar %c de %c\n", no1->Registro, no2->Registro);
-
     TipoIndexAmp digitoAtual1 = ObterDigito(no1->Chave, posicao);
     TipoIndexAmp digitoAtual2 = ObterDigito(no2->Chave, posicao);
 
