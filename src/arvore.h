@@ -3,7 +3,7 @@
 
 typedef char* TipoChave;
 typedef char TipoRegistro;
-typedef char TipoIndexAmp;
+typedef char TipoDigito;
 
 typedef struct TipoTrieNo *TipoArvore;
 typedef struct TipoTrieNo {

@@ -28,7 +28,7 @@ TipoArvore NovoNoVazio() {
 TipoRegistro* PesquisarR(TipoChave k, TipoArvore t, int posicao) {
     if (t == NULL) return NULL;
 
-    TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
+    TipoDigito digitoAtual = ObterDigito(k, posicao);
 
     if (t->Esq == NULL && t->Dir == NULL) {
         if (ChavesSaoIguais(t->Chave, k))
@@ -59,8 +59,8 @@ TipoRegistro* Pesquisar(TipoChave k, TipoArvore t) {
 TipoArvore Separar(TipoArvore no1, TipoArvore no2, int posicao) {
     TipoArvore novo = NovoNoVazio();
 
-    TipoIndexAmp digitoAtual1 = ObterDigito(no1->Chave, posicao);
-    TipoIndexAmp digitoAtual2 = ObterDigito(no2->Chave, posicao);
+    TipoDigito digitoAtual1 = ObterDigito(no1->Chave, posicao);
+    TipoDigito digitoAtual2 = ObterDigito(no2->Chave, posicao);
 
     if (digitoAtual1 == '.' && digitoAtual2 == '.') {
         novo->Esq = Separar(no1, no2, posicao + 1);
@@ -101,7 +101,7 @@ TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao) {
     if (t->Esq == NULL && t->Dir == NULL)
         return Separar(NovoNoComRegistro(k, r), t, posicao);
 
-    TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
+    TipoDigito digitoAtual = ObterDigito(k, posicao);
 
     if (digitoAtual == '.')
         t->Esq = InserirR(k, r, t->Esq, posicao + 1);
