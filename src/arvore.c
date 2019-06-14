@@ -4,8 +4,6 @@
 
 #include "arvore.h"
 
-#define D 4 /* depende de TipoChave */
-
 int ChavesSaoIguais(TipoChave chave1, TipoChave chave2) {
     return strcmp(chave1, chave2) == 0;
 }
@@ -38,8 +36,6 @@ TipoRegistro* PesquisarR(TipoChave k, TipoArvore t, int posicao) {
         else
             return NULL;
     }
-
-    if (posicao > D) return NULL;
 
     if (digitoAtual == '.')
         return PesquisarR(k, t->Esq, posicao + 1);
