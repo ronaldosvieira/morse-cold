@@ -27,9 +27,5 @@ def main(*argv, **kwargs):
 	for coded_message in coded_messages:
 		print(coded_message)
 
-	print()
-
-	print(str('\n'.join(messages)))
-
 if __name__ == '__main__':
 	main()
