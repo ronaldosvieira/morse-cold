@@ -67,6 +67,7 @@ void TraduzirMensagem(char *mensagem, TipoArvore arvore) {
 }
 
 int main(int argc, char *argv[]) {
+    // Constroi a arvore
     TipoArvore arvore = ConstruirArvore();
 
     char* mensagem = NULL;
@@ -85,6 +86,14 @@ int main(int argc, char *argv[]) {
 
         // Traduz a mensagem
         TraduzirMensagem(mensagem, arvore);
+    }
+
+    // Se parametro exibir arvore estiver presente
+    if (argc == 2 && strcmp(argv[1], "-a") == 0) {
+        printf("\n");
+        
+        // Imprime a arvore em pre-ordem
+        ImprimirArvore(arvore);
     }
 
     return 0;
