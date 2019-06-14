@@ -13,15 +13,12 @@ def main(*argv, **kwargs):
 
 	morse[' '] = '/'
 
-	amount = 0
 	messages = []
 	coded_messages = []
 
 	message = input()
 
 	while message:
-		amount += 1
-
 		messages.append(message)
 		coded_messages.append(' '.join(map(morse.get, message)))
 
