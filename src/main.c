@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
-#include "patricia.h"
+#include "arvore.h"
 
 int main(int argc, char *argv[]) {
     TipoArvore a = NULL;

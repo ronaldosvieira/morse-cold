@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "patricia.h"
+#include "arvore.h"
 
 #define D 8 /* depende de TipoChave */
 

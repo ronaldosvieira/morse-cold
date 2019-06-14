@@ -1,5 +1,5 @@
-#ifndef MORSE_COLD_PATRICIA_H
-#define MORSE_COLD_PATRICIA_H
+#ifndef MORSE_COLD_ARVORE_H
+#define MORSE_COLD_ARVORE_H
 
 typedef unsigned char TipoChave; /* a definir, dependendo da aplicacao */
 typedef char TipoRegistro;
@@ -40,4 +40,4 @@ TipoArvore InsereEntre(TipoChave k, TipoArvore *t, int i);
 TipoArvore Insere(TipoChave k, TipoArvore *t);
 
 
-#endif //MORSE_COLD_PATRICIA_H
+#endif //MORSE_COLD_ARVORE_H
