@@ -4,32 +4,38 @@
 
 #include "arvore.h"
 
+int rand() {return 5;}
+
 int main(int argc, char *argv[]) {
     TipoArvore a = NULL;
     TipoChave c;
     int i, j, k, n;
+
     int min = 32, max = 126;
     TipoChave vetor[95];
-    /* Gera uma permutacao aleatoria de chaves dos caracteres ASCII 32 a  126 */
-    struct timeval semente;
-    gettimeofday(&semente, NULL);
-    srand((int) (semente.tv_sec + 1000000 * semente.tv_usec));
-    for (i = min; i <= max; i++)
-        vetor[i - 32] = i;
-    for (i = min; i <= max; i++) {
-        k = min + (int) ((float) (max - min) * rand() / (RAND_MAX + 1.0));
-        j = min + (int) ((float) (max - min) * rand() / (RAND_MAX + 1.0));
-        n = vetor[k - 32];
-        vetor[k - 32] = vetor[j - 32];
-        vetor[j - 32] = n;
+
+    FILE *arquivo;
+    char* linha = NULL;
+    size_t tamanho = 0;
+    ssize_t leu;
+
+    // Abre arquivo morse.txt
+    arquivo = fopen("../src/morse.txt", "r");
+
+    // Termina a execucao em caso de erro
+    if (arquivo == NULL) {
+        printf("Erro: morse.txt nao pode ser aberto. Ele existe?\n");
+        return EXIT_FAILURE;
     }
-    /* Insere cada chave na arvore */
-    for (i = min; i <= max; i++) {
+
+    // Insere cada chave na arvore
+    /*for (i = min; i <= max; i++) {
         c = vetor[i - 32];
         printf("Inserindo chave: %c\n", c);
         a = Insere(c, &a);
     }
-    /* Gera outra permutacao aleatoria de chaves */
+
+    // Gera outra permutacao aleatoria de chaves
     for (i = min; i <= max; i++) {
         k = min + (int) ((float) (max - min) * rand() / (RAND_MAX + 1.0));
         j = min + (int) ((float) (max - min) * rand() / (RAND_MAX + 1.0));
@@ -37,11 +43,13 @@ int main(int argc, char *argv[]) {
         vetor[k - 32] = vetor[j - 32];
         vetor[j - 32] = n;
     }
-    /* Pesquisa cada chave na arvore */
+
+    // Pesquisa cada chave na arvore
     for (i = min; i <= max; i++) {
         c = vetor[i - 32];
         printf("Pesquisando chave: %c\n", c);
         Pesquisa(c, a);
-    }
+    }*/
+
     return 0;
 }
