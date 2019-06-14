@@ -30,14 +30,18 @@ int main(int argc, char *argv[]) {
 
     // Lê cada linha do arquivo
     while (getline(&linha, &tamanho, arquivo) != -1) {
-        // Identifica simbolo e codigo
+        // Obtem simbolo e codigo
         TipoRegistro simbolo = linha[0];
         TipoChave codigo = (TipoChave) malloc(6 * sizeof(char));
 
         strcpy(codigo, &linha[2]);
 
+        // Coloca o \0 no lugar do \n no codigo
+        for (i = 0; linha[i + 2] != '\n'; i++);
+
+        codigo[i] = '\0';
+
         // Insere na arvore
-        printf("Inserindo chave: %c %s\n", simbolo, codigo);
         a = Insere(codigo, simbolo, &a);
     }
 

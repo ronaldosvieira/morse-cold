@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "arvore.h"
 
-#define D 5 /* depende de TipoChave */
+#define D 4 /* depende de TipoChave */
 
 TipoDib Bit(TipoIndexAmp i, TipoChave k) {
     return k[i];
@@ -35,15 +36,21 @@ TipoArvore CriaNoExt(TipoChave k, TipoRegistro r) {
 
 void Pesquisa(TipoChave k, TipoArvore t) {
     if (EExterno(t)) {
-        if (k == t->NO.NExterno.Chave)
+        if (strcmp(k, t->NO.NExterno.Chave) == 0)
             printf("Elemento encontrado\n");
-        else printf("Elemento nao encontrado\n");
+        else
+            printf("Elemento nao encontrado\n");
+
         return;
     }
-    if (Bit(t->NO.NInterno.Index, k) == 0)
+    TipoIndexAmp bit_at_index = Bit(t->NO.NInterno.Index, k);
+
+    if (bit_at_index == '.')
         Pesquisa(k, t->NO.NInterno.Esq);
-    else
+    else if (bit_at_index == '-')
         Pesquisa(k, t->NO.NInterno.Dir);
+    else
+        printf("Erro: bit invalido\n");
 }
 
 TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i) {
@@ -51,14 +58,24 @@ TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i) {
     if (EExterno(*t) || i < (*t)->NO.NInterno.Index) {
         /* cria um novo no externo */
         p = CriaNoExt(k, r);
-        if (Bit(i, k) == 1)
+        TipoIndexAmp bit_at_index = Bit(i, k);
+
+        if (bit_at_index == '.')
+            return (CriaNoInt(i, &p, t));
+        else if (bit_at_index == '-')
             return (CriaNoInt(i, t, &p));
-        else return (CriaNoInt(i, &p, t));
+        else
+            printf("Erro: bit invalido\n");
     } else {
-        if (Bit((*t)->NO.NInterno.Index, k) == 1)
+        TipoIndexAmp bit_at_index = Bit((*t)->NO.NInterno.Index, k);
+
+        if (bit_at_index == '.')
+            (*t)->NO.NInterno.Esq = InsereEntre(k, r, &(*t)->NO.NInterno.Esq, i);
+        else if (bit_at_index == '-')
             (*t)->NO.NInterno.Dir = InsereEntre(k, r, &(*t)->NO.NInterno.Dir, i);
         else
-            (*t)->NO.NInterno.Esq = InsereEntre(k, r, &(*t)->NO.NInterno.Esq, i);
+            printf("Erro: bit invalido\n");
+
         return (*t);
     }
 }
@@ -71,10 +88,14 @@ TipoArvore Insere(TipoChave k, TipoRegistro r, TipoArvore *t) {
     else {
         p = *t;
         while (!EExterno(p)) {
-            if (Bit(p->NO.NInterno.Index, k) == 1)
+            TipoIndexAmp bit_at_index = Bit(p->NO.NInterno.Index, k);
+
+            if (bit_at_index == '.')
+                p = p->NO.NInterno.Esq;
+            else if (bit_at_index == '-')
                 p = p->NO.NInterno.Dir;
             else
-                p = p->NO.NInterno.Esq;
+                printf("Erro: bit invalido\n");
         }
 
         /* acha o primeiro bit diferente */

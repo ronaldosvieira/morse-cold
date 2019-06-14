@@ -3,7 +3,7 @@
 
 typedef char* TipoChave; /* a definir, dependendo da aplicacao */
 typedef char TipoRegistro;
-typedef unsigned char TipoIndexAmp;
+typedef char TipoIndexAmp;
 typedef char TipoDib;
 
 typedef enum {
