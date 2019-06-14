@@ -4,40 +4,30 @@
 typedef char* TipoChave; /* a definir, dependendo da aplicacao */
 typedef char TipoRegistro;
 typedef char TipoIndexAmp;
-typedef char TipoDib;
 
-typedef enum {
-    Interno, Externo
-} TipoNo;
+typedef struct TipoTrieNo *TipoArvore;
+typedef struct TipoTrieNo {
+    TipoChave Chave;
+    TipoArvore Esq, Dir;
+    TipoRegistro Registro;
+} TipoTrieNo;
 
-typedef struct TipoPatNo *TipoArvore;
-typedef struct TipoPatNo {
-    TipoNo nt;
-    union {
-        struct {
-            TipoIndexAmp Index;
-            TipoArvore Esq, Dir;
-        } NInterno;
-        struct {
-            TipoChave Chave;
-            TipoRegistro Registro;
-        } NExterno;
-    } NO;
-} TipoPatNo;
+int ChavesSaoIguais(TipoChave chave1, TipoChave chave2);
 
-TipoDib Bit(TipoIndexAmp i, TipoChave k);
+int ObterDigito(TipoChave chave, int posicao);
 
-short EExterno(TipoArvore p);
+TipoArvore NovoNoComRegistro(TipoChave chave, TipoRegistro registro);
 
-TipoArvore CriaNoInt(int i, TipoArvore *Esq, TipoArvore *Dir);
+TipoArvore NovoNoVazio();
 
-TipoArvore CriaNoExt(TipoChave k, TipoRegistro r);
+TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao);
 
-void Pesquisa(TipoChave k, TipoArvore t);
+TipoRegistro* Pesquisa(TipoChave k, TipoArvore t);
 
-TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i);
+TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao);
 
-TipoArvore Insere(TipoChave k, TipoRegistro r, TipoArvore *t);
+TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao);
 
+TipoArvore Inserir(TipoChave k, TipoRegistro r, TipoArvore t);
 
 #endif //MORSE_COLD_ARVORE_H

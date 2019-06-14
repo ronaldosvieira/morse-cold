@@ -6,109 +6,93 @@
 
 #define D 4 /* depende de TipoChave */
 
-TipoDib Bit(TipoIndexAmp i, TipoChave k) {
-    return k[i];
+TipoArvore Separa(TipoArvore pNo, TipoArvore pTrieNo, int posicao);
+
+int ChavesSaoIguais(TipoChave chave1, TipoChave chave2) {
+    return strcmp(chave1, chave2) == 0;
 }
 
-short EExterno(TipoArvore p) {
-    /* Verifica se p^ e nodo externo */
-    return (p->nt == Externo);
+int ObterDigito(TipoChave chave, int posicao) {
+    return chave[posicao];
 }
 
-TipoArvore CriaNoInt(int i, TipoArvore *Esq, TipoArvore *Dir) {
-    TipoArvore p;
-    p = (TipoArvore) malloc(sizeof(TipoPatNo));
-    p->nt = Interno;
-    p->NO.NInterno.Esq = *Esq;
-    p->NO.NInterno.Dir = *Dir;
-    p->NO.NInterno.Index = i;
+TipoArvore NovoNoComRegistro(TipoChave chave, TipoRegistro registro) {
+    TipoArvore p = (TipoArvore) malloc(sizeof(TipoTrieNo));
+
+    p->Chave = chave;
+    p->Registro = registro;
+
     return p;
 }
 
-TipoArvore CriaNoExt(TipoChave k, TipoRegistro r) {
-    TipoArvore p;
-    p = (TipoArvore) malloc(sizeof(TipoPatNo));
-    p->nt = Externo;
-    p->NO.NExterno.Chave = k;
-    p->NO.NExterno.Registro = r;
-    return p;
+TipoArvore NovoNoVazio() {
+    return (TipoArvore) malloc(sizeof(TipoTrieNo));
 }
 
-void Pesquisa(TipoChave k, TipoArvore t) {
-    if (EExterno(t)) {
-        if (strcmp(k, t->NO.NExterno.Chave) == 0)
-            printf("Elemento encontrado\n");
+TipoRegistro* PesquisaR(TipoChave k, TipoArvore t, int posicao) {
+    if (t == NULL) return NULL;
+
+    if (t->Esq == NULL && t->Dir == NULL) {
+        if (ChavesSaoIguais(t->Chave, k))
+            return &t->Registro;
         else
-            printf("Elemento nao encontrado\n");
-
-        return;
+            return NULL;
     }
-    TipoIndexAmp bit_at_index = Bit(t->NO.NInterno.Index, k);
 
-    if (bit_at_index == '.')
-        Pesquisa(k, t->NO.NInterno.Esq);
-    else if (bit_at_index == '-')
-        Pesquisa(k, t->NO.NInterno.Dir);
+    if (posicao > D) return NULL;
+
+    if (ObterDigito(k, posicao) == '.')
+        return PesquisaR(k, t->Esq, posicao + 1);
+    else if (ObterDigito(k, posicao) == '-')
+        return PesquisaR(k, t->Dir, posicao + 1);
     else
-        printf("Erro: bit invalido\n");
+        printf("Erro: digito invalido\n");
+
+    return NULL;
 }
 
-TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i) {
-    TipoArvore p;
-    if (EExterno(*t) || i < (*t)->NO.NInterno.Index) {
-        /* cria um novo no externo */
-        p = CriaNoExt(k, r);
-        TipoIndexAmp bit_at_index = Bit(i, k);
-
-        if (bit_at_index == '.')
-            return (CriaNoInt(i, &p, t));
-        else if (bit_at_index == '-')
-            return (CriaNoInt(i, t, &p));
-        else
-            printf("Erro: bit invalido\n");
-    } else {
-        TipoIndexAmp bit_at_index = Bit((*t)->NO.NInterno.Index, k);
-
-        if (bit_at_index == '.')
-            (*t)->NO.NInterno.Esq = InsereEntre(k, r, &(*t)->NO.NInterno.Esq, i);
-        else if (bit_at_index == '-')
-            (*t)->NO.NInterno.Dir = InsereEntre(k, r, &(*t)->NO.NInterno.Dir, i);
-        else
-            printf("Erro: bit invalido\n");
-
-        return (*t);
-    }
+TipoRegistro* Pesquisa(TipoChave k, TipoArvore t) {
+    return PesquisaR(k, t, 0);
 }
 
-TipoArvore Insere(TipoChave k, TipoRegistro r, TipoArvore *t) {
-    TipoArvore p;
-    int i;
+TipoArvore Separa(TipoArvore no1, TipoArvore no2, int posicao) {
+    TipoArvore novo = NovoNoVazio();
 
-    if (*t == NULL) return (CriaNoExt(k, r));
-    else {
-        p = *t;
-        while (!EExterno(p)) {
-            TipoIndexAmp bit_at_index = Bit(p->NO.NInterno.Index, k);
+    TipoIndexAmp digitoAtual1 = ObterDigito(no1->Chave, posicao);
+    TipoIndexAmp digitoAtual2 = ObterDigito(no2->Chave, posicao);
 
-            if (bit_at_index == '.')
-                p = p->NO.NInterno.Esq;
-            else if (bit_at_index == '-')
-                p = p->NO.NInterno.Dir;
-            else
-                printf("Erro: bit invalido\n");
-        }
-
-        /* acha o primeiro bit diferente */
-        i = 0;
-
-        while ((i <= D) && (Bit((int) i, k) == Bit((int) i, p->NO.NExterno.Chave)))
-            i++;
-
-        if (i > D) {
-            printf("Erro: chave ja esta na arvore\n");
-            return (*t);
-        }
-        else
-            return (InsereEntre(k, r, t, i));
+    if (digitoAtual1 == '.' && digitoAtual2 == '.') {
+        novo->Esq = Separa(no1, no2, posicao + 1);
+    } else if (digitoAtual1 == '-' && digitoAtual2 == '-') {
+        novo->Dir = Separa(no1, no2, posicao + 1);
+    } else if (digitoAtual1 == '.' && digitoAtual2 == '-') {
+        novo->Esq = no1;
+        novo->Dir = no2;
+    } else if (digitoAtual1 == '-' && digitoAtual2 == '.') {
+        novo->Esq = no2;
+        novo->Dir = no1;
     }
+
+    return novo;
+}
+
+TipoArvore InserirR(TipoChave k, TipoRegistro r, TipoArvore t, int posicao) {
+    if (t == NULL) return NovoNoComRegistro(k, r);
+
+    if (t->Esq == NULL && t->Dir == NULL)
+        return Separa(NovoNoComRegistro(k, r), t, posicao);
+
+    TipoIndexAmp digitoAtual = ObterDigito(k, posicao);
+    if (digitoAtual == '.')
+        t->Esq = InserirR(k, r, t->Esq, posicao + 1);
+    else if (digitoAtual == '-')
+        t->Dir = InserirR(k, r, t->Dir, posicao + 1);
+    else
+        printf("Erro: digito invalido\n");
+
+    return t;
+}
+
+TipoArvore Inserir(TipoChave k, TipoRegistro r, TipoArvore t) {
+    return InserirR(k, r, t, 0);
 }
