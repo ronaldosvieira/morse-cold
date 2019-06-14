@@ -1,10 +1,10 @@
 #ifndef MORSE_COLD_ARVORE_H
 #define MORSE_COLD_ARVORE_H
 
-typedef unsigned char TipoChave; /* a definir, dependendo da aplicacao */
+typedef char* TipoChave; /* a definir, dependendo da aplicacao */
 typedef char TipoRegistro;
 typedef unsigned char TipoIndexAmp;
-typedef unsigned char TipoDib;
+typedef char TipoDib;
 
 typedef enum {
     Interno, Externo
@@ -31,13 +31,13 @@ short EExterno(TipoArvore p);
 
 TipoArvore CriaNoInt(int i, TipoArvore *Esq, TipoArvore *Dir);
 
-TipoArvore CriaNoExt(TipoChave k);
+TipoArvore CriaNoExt(TipoChave k, TipoRegistro r);
 
 void Pesquisa(TipoChave k, TipoArvore t);
 
-TipoArvore InsereEntre(TipoChave k, TipoArvore *t, int i);
+TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i);
 
-TipoArvore Insere(TipoChave k, TipoArvore *t);
+TipoArvore Insere(TipoChave k, TipoRegistro r, TipoArvore *t);
 
 
 #endif //MORSE_COLD_ARVORE_H

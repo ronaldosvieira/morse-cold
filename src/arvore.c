@@ -3,18 +3,10 @@
 
 #include "arvore.h"
 
-#define D 8 /* depende de TipoChave */
+#define D 5 /* depende de TipoChave */
 
 TipoDib Bit(TipoIndexAmp i, TipoChave k) {
-    /* Retorna o i-esimo bit da chave k a partir da esquerda */
-    int c, j;
-    if (i == 0)
-        return 0;
-    else {
-        c = k;
-        for (j = 1; j <= D - i; j++) c /= 2;
-        return (c & 1);
-    }
+    return k[i];
 }
 
 short EExterno(TipoArvore p) {
@@ -32,11 +24,12 @@ TipoArvore CriaNoInt(int i, TipoArvore *Esq, TipoArvore *Dir) {
     return p;
 }
 
-TipoArvore CriaNoExt(TipoChave k) {
+TipoArvore CriaNoExt(TipoChave k, TipoRegistro r) {
     TipoArvore p;
     p = (TipoArvore) malloc(sizeof(TipoPatNo));
     p->nt = Externo;
     p->NO.NExterno.Chave = k;
+    p->NO.NExterno.Registro = r;
     return p;
 }
 
@@ -49,46 +42,52 @@ void Pesquisa(TipoChave k, TipoArvore t) {
     }
     if (Bit(t->NO.NInterno.Index, k) == 0)
         Pesquisa(k, t->NO.NInterno.Esq);
-    else Pesquisa(k, t->NO.NInterno.Dir);
+    else
+        Pesquisa(k, t->NO.NInterno.Dir);
 }
 
-TipoArvore InsereEntre(TipoChave k, TipoArvore *t, int i) {
+TipoArvore InsereEntre(TipoChave k, TipoRegistro r, TipoArvore *t, int i) {
     TipoArvore p;
     if (EExterno(*t) || i < (*t)->NO.NInterno.Index) {
         /* cria um novo no externo */
-        p = CriaNoExt(k);
+        p = CriaNoExt(k, r);
         if (Bit(i, k) == 1)
             return (CriaNoInt(i, t, &p));
         else return (CriaNoInt(i, &p, t));
     } else {
         if (Bit((*t)->NO.NInterno.Index, k) == 1)
-            (*t)->NO.NInterno.Dir = InsereEntre(k, &(*t)->NO.NInterno.Dir, i);
+            (*t)->NO.NInterno.Dir = InsereEntre(k, r, &(*t)->NO.NInterno.Dir, i);
         else
-            (*t)->NO.NInterno.Esq = InsereEntre(k, &(*t)->NO.NInterno.Esq, i);
+            (*t)->NO.NInterno.Esq = InsereEntre(k, r, &(*t)->NO.NInterno.Esq, i);
         return (*t);
     }
 }
 
-TipoArvore Insere(TipoChave k, TipoArvore *t) {
+TipoArvore Insere(TipoChave k, TipoRegistro r, TipoArvore *t) {
     TipoArvore p;
     int i;
-    if (*t == NULL)
-        return (CriaNoExt(k));
+
+    if (*t == NULL) return (CriaNoExt(k, r));
     else {
         p = *t;
         while (!EExterno(p)) {
             if (Bit(p->NO.NInterno.Index, k) == 1)
                 p = p->NO.NInterno.Dir;
-            else p = p->NO.NInterno.Esq;
+            else
+                p = p->NO.NInterno.Esq;
         }
+
         /* acha o primeiro bit diferente */
-        i = 1;
-        while ((i <= D) & (Bit((int) i, k) == Bit((int) i, p->NO.NExterno.Chave)))
+        i = 0;
+
+        while ((i <= D) && (Bit((int) i, k) == Bit((int) i, p->NO.NExterno.Chave)))
             i++;
+
         if (i > D) {
             printf("Erro: chave ja esta na arvore\n");
             return (*t);
         }
-        else return (InsereEntre(k, t, i));
+        else
+            return (InsereEntre(k, r, t, i));
     }
 }
