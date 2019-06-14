@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
     // Se parametro exibir arvore estiver presente
     if (argc == 2 && strcmp(argv[1], "-a") == 0) {
         printf("\n");
-        
+
         // Imprime a arvore em pre-ordem
         ImprimirArvore(arvore);
     }

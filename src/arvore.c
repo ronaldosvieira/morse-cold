@@ -129,14 +129,8 @@ TipoArvore Inserir(TipoChave k, TipoRegistro r, TipoArvore t) {
 void ImprimirArvoreR(TipoArvore a, int nivel) {
     if (a == NULL) return;
 
-    int i;
-    for (i = 0; i < nivel; i++)
-        printf("\t");
-
     if (a->Chave != NULL)
-        printf("(%s %c)\n", a->Chave, a->Registro);
-    else
-        printf("( . )\n");
+        printf("%c %s\n", a->Registro, a->Chave);
 
     ImprimirArvoreR(a->Esq, nivel + 1);
     ImprimirArvoreR(a->Dir, nivel + 1);
