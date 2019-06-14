@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 
 #include "arvore.h"
@@ -8,7 +9,6 @@ int rand() {return 5;}
 
 int main(int argc, char *argv[]) {
     TipoArvore a = NULL;
-    TipoChave c;
     int i, j, k, n;
 
     int min = 32, max = 126;
@@ -26,6 +26,19 @@ int main(int argc, char *argv[]) {
     if (arquivo == NULL) {
         printf("Erro: morse.txt nao pode ser aberto. Ele existe?\n");
         return EXIT_FAILURE;
+    }
+
+    // Lê cada linha do arquivo
+    while (getline(&linha, &tamanho, arquivo) != -1) {
+        // Identifica simbolo e codigo
+        TipoRegistro simbolo = linha[0];
+        TipoChave codigo = (TipoChave) malloc(6 * sizeof(char));
+
+        strcpy(codigo, &linha[2]);
+
+        // Insere na arvore
+        printf("Inserindo chave: %c %s\n", simbolo, codigo);
+        a = Insere(codigo, simbolo, &a);
     }
 
     // Insere cada chave na arvore
